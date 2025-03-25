@@ -49,7 +49,7 @@ public class User implements UserDetails, Principal {
     @OneToMany(mappedBy = "owner")
     private List<Book> books;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "userId")
     private List<BookTransactionHistory> histories;
 
     @CreatedDate
