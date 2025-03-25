@@ -1,0 +1,49 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/book_social_network
+    username: postgres
+    password: liku1234
+    driver-class-name: org.postgresql.Driver
+
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        database: postgresql
+
+
+  mail:
+    host: localhost
+    port: 1025
+    username: book
+    password: book
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+          auth: true
+          starttls:
+            enable: true
+            connection-timeout: 5000
+            timeout: 3000
+            write-timeout: 5000
+
+  application:
+    security:
+      jwt:
+        secret-key: f502e65e1bcc927177e5077595ff6b93816d3112bca96244b7a2b7335cecaa31
+        expiration: 3600000
+    mailing:
+      frontend:
+        activation-url: http://localhost:4200/activate-account
+    file:
+      upload:
+        photos-output-path: ./uploads
+
+  server:
+    port: 8081
