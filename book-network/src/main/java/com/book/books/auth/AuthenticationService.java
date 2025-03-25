@@ -8,7 +8,6 @@ import com.book.books.user.TokenRepository;
 import com.book.books.user.User;
 import com.book.books.user.UserRepository;
 import jakarta.mail.MessagingException;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -81,7 +80,7 @@ public class AuthenticationService {
 
     private String generateAndSaveActivationToken(User user) {
         // generate a token
-        String generatedToken = generateActivationCode(6);
+        String generatedToken = generateActivationCode();
         var token = Token.builder()
                 .token(generatedToken)
                 .createdAt(LocalDateTime.now())
@@ -96,11 +95,11 @@ public class AuthenticationService {
 
 
     // Generate An Activation Code
-    private String generateActivationCode(int length) {
+    private String generateActivationCode() {
         String characters = "0123456789";
         StringBuilder codeBuilder = new StringBuilder();
         SecureRandom secureRandom = new SecureRandom();
-        for(int i = 0; i < length; i++) {
+        for(int i = 0; i < 6; i++) {
             int randomIndex = secureRandom.nextInt(characters.length());// (0 - > 9)
             codeBuilder.append(characters.charAt(randomIndex));
         }
@@ -143,7 +142,7 @@ public class AuthenticationService {
     //   @Transactional
     public void activateAccount(String token) throws MessagingException {
         Token savedToken  = tokenRepository.findByToken(token)
-                // todo exception has to be defined
+
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
         if(LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
             sendValidationEmail(savedToken.getUser());
