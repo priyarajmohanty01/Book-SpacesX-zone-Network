@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.security.SecureRandom;
@@ -137,30 +138,38 @@ public class AuthenticationService {
         }
     }
 
-
-
-    //   @Transactional
+    @Transactional
     public void activateAccount(String token) throws MessagingException {
-        Token savedToken  = tokenRepository.findByToken(token)
-
+        Token savedToken = tokenRepository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
-        if(LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
-            sendValidationEmail(savedToken.getUser());
-            throw new RuntimeException("Activation token has expired. A new token has been sent to the same email address ");
 
+        if (LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
+            // Send validation email
+            sendValidationEmail(savedToken.getUser());
+
+            // Create and save a new activation token
+            Token newToken = createNewToken(savedToken.getUser());
+            tokenRepository.save(newToken);
+
+            throw new RuntimeException("Activation token has expired. A new token has been sent to the same email address.");
         }
+
         var user = userRepository.findById(savedToken.getUser().getId())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-                user.setEnabled(true);
+
+        user.setEnabled(true);
         userRepository.save(user);
 
         savedToken.setValidatedAt(LocalDateTime.now());
         tokenRepository.save(savedToken);
+    }
 
-
-
-
-
-
+    private Token createNewToken(User user) {
+        // Logic to create a new activation token for the user
+        Token newToken = new Token();
+        newToken.setUser(user);
+        newToken.setExpiresAt(LocalDateTime.now().plusHours(24)); // Set expiration time as needed
+        // Additional properties can be set here
+        return newToken;
     }
 }
