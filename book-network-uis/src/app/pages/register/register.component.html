@@ -1,0 +1,42 @@
+<div class="container-fluid card login-container shadow-lg p-4 rounded">
+
+  <h3 class="text-center text-primary mb-4">Create An Account</h3>
+  <hr class="mb-4">
+
+  <div class="alert alert-danger" role="alert" *ngIf="errorMsg.length">
+    <p *ngFor="let msg of errorMsg">{{ msg }}</p>
+  </div>
+
+  <div class="mb-3">
+    <label for="firstname" class="form-label">FirstName</label>
+    <input [(ngModel)]="registerRequest.firstname" type="text" class="form-control border border-primary rounded" id="firstname" placeholder="Enter Your First Name">
+  </div>
+
+  <div class="mb-3">
+    <label for="lastname" class="form-label">LastName</label>
+    <input [(ngModel)]="registerRequest.lastname" type="text" class="form-control border border-primary rounded" id="lastname" placeholder="Enter Your Last Name ">
+  </div>
+
+  <div class="mb-3">
+    <label for="login" class="form-label">Email Address</label>
+    <input [(ngModel)]="registerRequest.email" type="email" class="form-control border border-primary rounded" id="login" placeholder="name@example.com">
+  </div>
+
+
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input [(ngModel)]="registerRequest.password" type="password" class="form-control border border-primary rounded" id="password" placeholder="Password">
+  </div>
+
+  <div class="d-flex justify-content-between mb-3">
+    <button (click)="register()" type="button" class="btn btn-primary btn-lg w-100">
+      <em class="fas fa-sign-in-alt"></em>&nbsp; Sign up
+    </button>
+  </div>
+
+  <div class="text-center mt-3">
+    Already have an account?&nbsp;
+    <button (click)="login()" type="button" class="btn btn-link text-primary">Login</button>
+  </div>
+
+</div>
