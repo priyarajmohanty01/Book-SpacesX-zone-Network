@@ -1,0 +1,62 @@
+li > a {
+  position: relative; /* For positioning the pseudo-elements */
+  padding: 10px 15px; /* Add padding for better spacing */
+  transition: color 0.3s ease, background-color 0.3s ease; /* Smooth transitions */
+  font-family: 'Arial', sans-serif; /* Change font for modern look */
+  font-size: 16px; /* Set a consistent font size */
+  color: #333; /* Default text color */
+
+  &:hover {
+    background-color: #d6e5f1; /* Light background on hover */
+    border-radius: 5px;
+    color: #0056b3; /* Change text color on hover */
+
+    &::after {
+      content: ''; /* Create a bottom border effect */
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -2px; /* Positioning below the link */
+      height: 2px; /* Thickness of the border */
+      background-color: #24a7e9; /* Border color */
+      transition: width 0.3s ease; /* Smooth transition for border */
+      width: 100%; /* Full width by default */
+    }
+  }
+
+  &.active {
+    color: #24a7e9; /* Active link color */
+    border-radius: 5px;
+    font-weight: bold; /* Make active link bold */
+
+    &::before {
+      content: ''; /* Create a top border effect for active link */
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: -2px; /* Positioning above the link */
+      height: 2px; /* Thickness of the border */
+      background-color: #24a7e9; /* Border color */
+    }
+  }
+
+  // New styles for a more dynamic look
+  &:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 5px rgba(36, 167, 233, 0.5); /* Add a subtle shadow effect on focus */
+    border-radius: 5px;
+    background-color: rgba(36, 167, 233, 0.1); /* Light background on focus */
+
+    &::after {
+      height: 3px; /* Thicker bottom border on focus */
+    }
+  }
+
+  // Adding a cool hover effect
+  &:hover::after {
+    width: 50%; /* Animate the width to half on hover for a cool effect */
+    left: 25%; /* Center the effect under the text */
+    transition-duration: 0.4s; /* Duration of the hover effect */
+    transition-timing-function: ease-in-out; /* Smooth easing for hover effect */
+  }
+}
