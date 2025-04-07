@@ -9,8 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface BookTransactionHistoryRepository extends JpaRepository<BookTransactionHistory, Integer> {
-
-
   @Query("""
             SELECT
             (COUNT (*) > 0) AS isBorrowed
@@ -62,4 +60,4 @@ public interface BookTransactionHistoryRepository extends JpaRepository<BookTran
             WHERE history.book.createdBy = :userId
             """)
   Page<BookTransactionHistory> findAllReturnedBooks(Pageable pageable, String userId);
- }
+}

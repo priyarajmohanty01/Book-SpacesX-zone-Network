@@ -152,7 +152,7 @@
         ],
         "requestBody": {
           "content": {
-            "mulitipart/form-data": {
+            "multipart/form-data": {
               "schema": {
                 "required": [
                   "file"

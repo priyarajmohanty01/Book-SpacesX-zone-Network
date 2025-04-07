@@ -5,6 +5,7 @@ import com.book.books.history.BookTransactionHistory;
 import com.book.books.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,35 +21,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static jakarta.persistence.FetchType.EAGER;
-
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-@Entity
-@Table(name = "_user") // Changed table name here
-@EntityListeners(AuditingEntityListener.class)
+@AllArgsConstructor
+ @Entity
+ @Table(name = "_user")
+ @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails, Principal {
+
     @Id
     @GeneratedValue
     private Integer id;
     private String firstname;
     private String lastname;
     private LocalDate dateOfBirth;
-
     @Column(unique = true)
     private String email;
     private String password;
     private boolean accountLocked;
     private boolean enabled;
-
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = EAGER)
     private List<Role> roles;
-
     @OneToMany(mappedBy = "owner")
     private List<Book> books;
-
     @OneToMany(mappedBy = "userId")
     private List<BookTransactionHistory> histories;
 
@@ -61,15 +58,10 @@ public class User implements UserDetails, Principal {
     private LocalDateTime lastModifiedDate;
 
     @Override
-    public String getName() {
-        return email;
-    }
-
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(r -> new SimpleGrantedAuthority(r.getName()))
                 .collect(Collectors.toList());
     }
 
@@ -104,6 +96,15 @@ public class User implements UserDetails, Principal {
     }
 
     public String fullName() {
-        return firstname + " " + lastname; // Fixed concatenation
+        return getFirstname() + " " + getLastname();
+    }
+
+    @Override
+    public String getName() {
+        return email;
+    }
+
+    public String getFullName() {
+        return firstname + " " + lastname;
     }
 }

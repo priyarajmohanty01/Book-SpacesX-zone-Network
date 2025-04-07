@@ -8,13 +8,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BookMapper {
-
-
     public Book toBook(BookRequest request) {
-
         return Book.builder()
                 .id(request.id())
                 .title(request.title())
+                .isbn(request.isbn())
                 .authorName(request.authorName())
                 .synopsis(request.synopsis())
                 .archived(false)
@@ -32,14 +30,12 @@ public class BookMapper {
                 .rate(book.getRate())
                 .archived(book.isArchived())
                 .shareable(book.isShareable())
-                .owner(book.getOwner().fullName())
+//                 .owner(book.getOwner().fullName())
                 .cover(FileUtils.readFileFromLocation(book.getBookCover()))
                 .build();
-
     }
 
     public BorrowedBookResponse toBorrowedBookResponse(BookTransactionHistory history) {
-
         return BorrowedBookResponse.builder()
                 .id(history.getBook().getId())
                 .title(history.getBook().getTitle())
@@ -49,6 +45,5 @@ public class BookMapper {
                 .returned(history.isReturned())
                 .returnApproved(history.isReturnApproved())
                 .build();
-
     }
 }
